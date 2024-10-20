@@ -78,6 +78,9 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/")
+def health_check():
+    return {"status": "OK"}
 
 @app.post("/blacklists", response_model=BlacklistCreateResponse)
 def add_to_blacklist(
@@ -126,8 +129,9 @@ def reset_database(token: str = Depends(get_token)):
 ### PING DEPLOYMENT VALIDATIONS
 DEPLOYMENT_MODE = "FIRST_DEPLOYMENT"
 
-@app.get("/ping")
+@app.get("/deploy")
 def ping():
     hostname = socket.gethostname()
     ## Return the hostname and the deployment mode
     return {"hostname": hostname, "deployment_mode": DEPLOYMENT_MODE}
+
