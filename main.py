@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
 import os
+import socket
 
 
 DB_USERNAME = os.getenv("DB_USERNAME", "postgres")
@@ -121,3 +122,12 @@ def reset_database(token: str = Depends(get_token)):
         return {"message": "Base de datos reseteada exitosamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al resetear la base de datos: {e}")
+
+### PING DEPLOYMENT VALIDATIONS
+DEPLOYMENT_MODE = "FIRST_DEPLOYMENT"
+
+@app.get("/ping")
+def ping():
+    hostname = socket.gethostname()
+    ## Return the hostname and the deployment mode
+    return {"hostname": hostname, "deployment_mode": DEPLOYMENT_MODE}
