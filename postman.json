@@ -5,6 +5,16 @@
         "description": "Colección de pruebas de integración para la aplicación FastAPI de lista negra.",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://tutorial-1-miso-devops-env.eba-7hn7nqhm.us-east-1.elasticbeanstalk.com"
+        },
+        {
+            "key": "API_TOKEN",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        }
+    ],
     "item": [
         {
             "name": "0. Resetear la base de datos",
@@ -27,10 +37,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 200
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 200', function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "1. Crear entrada - Datos válidos (con motivo)",
+            "name": "1. Crear blacklists - Datos válidos (con motivo)",
             "request": {
                 "method": "POST",
                 "header": [
@@ -59,10 +86,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 200
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 200', function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "2. Crear entrada - Datos válidos (sin motivo)",
+            "name": "2. Crear blacklists - Datos válidos (sin motivo)",
             "request": {
                 "method": "POST",
                 "header": [
@@ -91,10 +135,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 200
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 200', function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "3. Crear entrada - Sin token",
+            "name": "3. Crear blacklists - Sin token",
             "request": {
                 "method": "POST",
                 "header": [
@@ -118,10 +179,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 403
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 403', function () {",
+                            "    pm.response.to.have.status(403);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "4. Crear entrada - Sin email",
+            "name": "4. Crear blacklists - Sin email",
             "request": {
                 "method": "POST",
                 "header": [
@@ -150,10 +228,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 422
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 422', function () {",
+                            "    pm.response.to.have.status(422);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "5. Crear entrada - Sin UUID",
+            "name": "5. Crear blacklists - Sin UUID",
             "request": {
                 "method": "POST",
                 "header": [
@@ -182,10 +277,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 422
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 422', function () {",
+                            "    pm.response.to.have.status(422);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "6. Crear entrada - Email ya existe",
+            "name": "6. Crear blacklists - Email ya existe",
             "request": {
                 "method": "POST",
                 "header": [
@@ -214,7 +326,24 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 409
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 400', function () {",
+                            "    pm.response.to.have.status(400);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
             "name": "7. Consultar email - En lista negra",
@@ -238,7 +367,24 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 200
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 200', function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
             "name": "8. Consultar email - No en lista negra",
@@ -262,7 +408,24 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 200
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 200', function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
             "name": "9. Consultar email - Sin token",
@@ -280,10 +443,27 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 403
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 403', function () {",
+                            "    pm.response.to.have.status(403);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         },
         {
-            "name": "10. Crear entrada - 'blocked_reason' excede 255 caracteres",
+            "name": "10. Crear blacklists - 'blocked_reason' excede 255 caracteres",
             "request": {
                 "method": "POST",
                 "header": [
@@ -300,7 +480,8 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"email\": \"usuario10@example.com\",\n  \"app_uuid\": \"95c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"\n}"                },
+                    "raw": "{\n  \"email\": \"usuario10@example.com\",\n  \"app_uuid\": \"95c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"\n}"
+                },
                 "url": {
                     "raw": "{{base_url}}/blacklists",
                     "host": [
@@ -311,7 +492,24 @@
                     ]
                 }
             },
-            "response": []
+            "response": [
+                {
+                    "status": 422
+                }
+            ],
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status code is 422', function () {",
+                            "    pm.response.to.have.status(422);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
         }
     ]
 }
