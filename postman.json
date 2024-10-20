@@ -1,0 +1,317 @@
+{
+    "info": {
+        "name": "Pruebas de Integración - Servicio de Lista Negra",
+        "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
+        "description": "Colección de pruebas de integración para la aplicación FastAPI de lista negra.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "0. Resetear la base de datos",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/reset",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "reset"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "1. Crear entrada - Datos válidos (con motivo)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"usuario1@example.com\",\n  \"app_uuid\": \"05c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Motivo de prueba\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "2. Crear entrada - Datos válidos (sin motivo)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"usuario2@example.com\",\n  \"app_uuid\": \"15c9570d-a88c-4351-9169-b2dad1d84be9\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "3. Crear entrada - Sin token",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"usuario3@example.com\",\n  \"app_uuid\": \"25c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Sin token\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "4. Crear entrada - Sin email",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"app_uuid\": \"35c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Sin email\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "5. Crear entrada - Sin UUID",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"usuario5@example.com\",\n  \"blocked_reason\": \"Sin UUID\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "6. Crear entrada - Email ya existe",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"usuario1@example.com\",\n  \"app_uuid\": \"05c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Email duplicado\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "7. Consultar email - En lista negra",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/blacklists/usuario1@example.com",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists",
+                        "usuario1@example.com"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "8. Consultar email - No en lista negra",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/blacklists/noexiste@example.com",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists",
+                        "noexiste@example.com"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "9. Consultar email - Sin token",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/blacklists/usuario1@example.com",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists",
+                        "usuario1@example.com"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "10. Crear entrada - 'blocked_reason' excede 255 caracteres",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{API_TOKEN}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"usuario10@example.com\",\n  \"app_uuid\": \"95c9570d-a88c-4351-9169-b2dad1d84be9\",\n  \"blocked_reason\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"\n}"                },
+                "url": {
+                    "raw": "{{base_url}}/blacklists",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "blacklists"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

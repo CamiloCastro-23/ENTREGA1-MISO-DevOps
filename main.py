@@ -112,3 +112,12 @@ def check_blacklist(
         return {"is_blacklisted": True, "blocked_reason": entry.blocked_reason}
     else:
         return {"is_blacklisted": False, "blocked_reason": None}
+
+@app.post("/reset")
+def reset_database(token: str = Depends(get_token)):
+    try:
+        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
+        return {"message": "Base de datos reseteada exitosamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al resetear la base de datos: {e}")
