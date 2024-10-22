@@ -3,9 +3,10 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr, constr
 from typing import Optional
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import create_engine, Column, String, DateTime, Text
+import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
@@ -19,13 +20,19 @@ DB_HOST = os.getenv("DB_HOST", "database-1.cj5g868olfdm.us-east-1.rds.amazonaws.
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "postgres")
 
-DATABASE_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+IS_TEST_MODE = os.getenv("TEST_MODE", False)
+
+if IS_TEST_MODE:
+    DATABASE_URL = "sqlite:///:memory:"
+else: #pragma: no cover
+    DATABASE_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}" #pragma: no cover
+
 
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
-Base = declarative_base()
+Base = sqlalchemy.orm.declarative_base()
 
 
 class BlacklistEntry(Base):
@@ -45,6 +52,7 @@ app = FastAPI()
 
 API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
+DEPLOYMENT_MODE = "FIRST_DEPLOYMENT"
 
 security = HTTPBearer()
 
@@ -82,6 +90,32 @@ def get_db():
 def health_check():
     return {"status": "OK"}
 
+@app.get("/deploy")
+def ping():
+    hostname = socket.gethostname()
+    return {"hostname": hostname, "deployment_mode": DEPLOYMENT_MODE}
+
+@app.post("/reset")
+def reset_database(token: str = Depends(get_token)):
+    try:
+        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
+        return {"message": "Base de datos reseteada exitosamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al resetear la base de datos: {e}")
+
+@app.get("/blacklists/{email}", response_model=BlacklistCheckResponse)
+def check_blacklist(
+    email: str,
+    token: str = Depends(get_token),
+    db: Session = Depends(get_db)
+):
+    entry = db.query(BlacklistEntry).filter(BlacklistEntry.email == email).first()
+    if entry:
+        return {"is_blacklisted": True, "blocked_reason": entry.blocked_reason}
+    else:
+        return {"is_blacklisted": False, "blocked_reason": None}
+
 @app.post("/blacklists", response_model=BlacklistCreateResponse)
 def add_to_blacklist(
     request_data: BlacklistCreateRequest,
@@ -98,40 +132,9 @@ def add_to_blacklist(
         app_uuid=str(request_data.app_uuid),
         blocked_reason=request_data.blocked_reason,
         ip_address=request.client.host,
-        timestamp=datetime.utcnow()
+        timestamp=datetime.now(timezone.utc)
     )
     db.add(blacklist_entry)
     db.commit()
     return {"message": "Email agregado a la lista negra exitosamente"}
-
-
-@app.get("/blacklists/{email}", response_model=BlacklistCheckResponse)
-def check_blacklist(
-    email: str,
-    token: str = Depends(get_token),
-    db: Session = Depends(get_db)
-):
-    entry = db.query(BlacklistEntry).filter(BlacklistEntry.email == email).first()
-    if entry:
-        return {"is_blacklisted": True, "blocked_reason": entry.blocked_reason}
-    else:
-        return {"is_blacklisted": False, "blocked_reason": None}
-
-@app.post("/reset")
-def reset_database(token: str = Depends(get_token)):
-    try:
-        Base.metadata.drop_all(bind=engine)
-        Base.metadata.create_all(bind=engine)
-        return {"message": "Base de datos reseteada exitosamente"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al resetear la base de datos: {e}")
-
-### PING DEPLOYMENT VALIDATIONS
-DEPLOYMENT_MODE = "FIRST_DEPLOYMENT"
-
-@app.get("/deploy")
-def ping():
-    hostname = socket.gethostname()
-    ## Return the hostname and the deployment mode
-    return {"hostname": hostname, "deployment_mode": DEPLOYMENT_MODE}
 

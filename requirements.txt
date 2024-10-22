@@ -3,3 +3,5 @@ pydantic>=2.7.0,<3.0.0
 uvicorn>=0.17.0,<1.0.0
 sqlalchemy 
 psycopg2-binary
+pytest
+pytest-mock
