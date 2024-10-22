@@ -22,8 +22,8 @@ DB_NAME = os.getenv("DB_NAME", "postgres")
 
 IS_TEST_MODE = os.getenv("TEST_MODE", False)
 
-if IS_TEST_MODE:
-    DATABASE_URL = "sqlite:///:memory:"
+if IS_TEST_MODE: #pragma: no cover
+    DATABASE_URL = "sqlite:///:memory:" #pragma: no cover
 else: #pragma: no cover
     DATABASE_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}" #pragma: no cover
 

@@ -11,6 +11,7 @@ phases:
   pre_build:
     commands:
       - echo "Running unit tests with coverage..."
+      - export TEST_MODE=true
       - pytest --cov=app --cov-report=term-missing 
 
   build:
