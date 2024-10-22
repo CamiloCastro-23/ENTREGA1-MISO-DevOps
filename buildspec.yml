@@ -5,24 +5,25 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installing dependencies for testing..."
-      - pip install -r requirements.txt
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt --progress-bar on
 
   pre_build:
     commands:
-      - echo "Running unit tests with coverage..."
+      - echo "Running unit tests..."
       - export TEST_MODE=true
-      - pytest --cov=app --cov-report=term-missing 
+      - pytest --cov=app --cov-report=term-missing
 
   build:
     commands:
       - echo "Logging into Amazon ECR..."
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 584763186660.dkr.ecr.us-east-1.amazonaws.com
       - echo "Building Docker image..."
-      - docker build -t 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest . --no-cache
+      - docker build --progress=plain -t 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest . --no-cache
 
   post_build:
     commands:
       - echo "Pushing Docker image to Amazon ECR..."
       - docker push 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest
       - echo "Docker image pushed successfully."
+
