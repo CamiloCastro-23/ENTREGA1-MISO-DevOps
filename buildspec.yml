@@ -12,7 +12,7 @@ phases:
     commands:
       - echo "=============== RUNNING UNIT TESTS WITH COVERAGE ==============="
       - export TEST_MODE=true
-      - pytest --cov=app --cov-report=term-missing 
+      - pytest --cov=app --cov-report=term-missing --cov-fail-under=95
 
   build:
     commands:
