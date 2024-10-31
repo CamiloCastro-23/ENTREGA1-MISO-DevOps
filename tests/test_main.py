@@ -13,7 +13,7 @@ class TestRootAndDeployEndpoints(unittest.TestCase):
     def test_health_check(self):
         """Test the health_check function directly"""
         response = health_check()
-        self.assertEqual(response, {"status": "OK"})
+        self.assertEqual(response, {"status": "OK - Pipeline de CI/CD con FastAPI"})
 
     @patch('socket.gethostname', return_value='mocked-hostname')
     def test_ping(self, mock_gethostname):

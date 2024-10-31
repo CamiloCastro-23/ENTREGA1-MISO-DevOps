@@ -26,3 +26,7 @@ phases:
       - echo "=============== PUSHING DOCKER IMAGE TO AMAZON ECR ==============="
       - docker push 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest
       - echo "=============== DOCKER IMAGE PUSHED SUCCESSFULLY ==============="
+
+artifacts:
+  files:
+    - '**/*'

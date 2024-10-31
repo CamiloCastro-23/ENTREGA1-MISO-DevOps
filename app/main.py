@@ -88,7 +88,7 @@ def get_db():
 
 @app.get("/")
 def health_check():
-    return {"status": "OK"}
+    return {"status": "OK - Pipeline de CI/CD con FastAPI"}
 
 @app.get("/deploy")
 def ping():
