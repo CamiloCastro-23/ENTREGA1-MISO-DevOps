@@ -13,20 +13,32 @@ phases:
       - echo "=============== RUNNING UNIT TESTS WITH COVERAGE ==============="
       - export TEST_MODE=true
       - pytest --cov=app --cov-report=term-missing --cov-fail-under=95
+      - echo "=============== LOGGING INTO AMAZON ECR ==============="
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 584763186660.dkr.ecr.us-east-1.amazonaws.com
 
   build:
     commands:
-      - echo "=============== LOGGING INTO AMAZON ECR ==============="
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 584763186660.dkr.ecr.us-east-1.amazonaws.com
       - echo "=============== BUILDING DOCKER IMAGE ==============="
-      - docker build -t 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest . --no-cache
+      - docker build -t blacklists:latest .
+      - docker tag blacklists:latest 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest
 
   post_build:
     commands:
       - echo "=============== PUSHING DOCKER IMAGE TO AMAZON ECR ==============="
       - docker push 584763186660.dkr.ecr.us-east-1.amazonaws.com/image-registry-np-dev-miso-devops:latest
-      - echo "=============== DOCKER IMAGE PUSHED SUCCESSFULLY ==============="
 
 artifacts:
   files:
     - '**/*'
+    - appspec.json
+    - task.json
+    - imagedefinitions.json
+    - imageDetail.json
+  secondary-artifacts:
+    DefinitionArtifact:
+      files:
+        - appspec.json
+        - task.json
+    ImageArtifact:
+      files:
+        - imageDetail.json
