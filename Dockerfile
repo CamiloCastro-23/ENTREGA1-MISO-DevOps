@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.9
+FROM --platform=linux/amd64 public.ecr.aws/docker/library/python:3.9
 
 WORKDIR /code
 
