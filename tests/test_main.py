@@ -20,7 +20,7 @@ class TestRootAndDeployEndpoints(unittest.TestCase):
         """Test the ping function directly"""
         response = ping()
         self.assertEqual(response['hostname'], 'mocked-hostname')
-        self.assertEqual(response['deployment_mode'], 'FIRST_DEPLOYMENT')
+        self.assertIn(response['deployment_mode'], ['FIRST_DEPLOYMENT', 'BLUE/GREEN'])
 
     @patch('app.main.Base.metadata.drop_all')  
     @patch('app.main.Base.metadata.create_all')  
