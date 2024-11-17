@@ -15,7 +15,7 @@ import socket
 
 
 DB_USERNAME = os.getenv("DB_USERNAME", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Db_miso-psswdDevops12")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "Db_miso-psswdDevops12-FAIL")
 DB_HOST = os.getenv("DB_HOST", "database-1.cj5g868olfdm.us-east-1.rds.amazonaws.com")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "postgres")
