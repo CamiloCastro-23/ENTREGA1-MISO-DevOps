@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Db_miso-psswdDevops12
+      POSTGRES_DB: postgres
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    ports:
+      - "5432:5432"
+    container_name: postgres
+    networks:
+      - blacklist-network
+
+  api:
+    image: blacklist-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: Db_miso-psswdDevops12
+      DB_NAME: postgres
+      DB_PORT: 5432
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    container_name: blacklist-api
+    networks:
+      - blacklist-network
+
+networks:
+  blacklist-network:
+    driver: bridge

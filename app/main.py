@@ -1,3 +1,9 @@
+import os
+import newrelic.agent
+
+newrelic_config = os.getenv('NEW_RELIC_CONFIG_FILE', './newrelic.ini')
+newrelic.agent.initialize(newrelic_config)
+
 from fastapi import FastAPI, Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr, constr
@@ -17,6 +23,7 @@ import socket
 DB_USERNAME = os.getenv("DB_USERNAME", "postgres")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "Db_miso-psswdDevops12")
 DB_HOST = os.getenv("DB_HOST", "database-1.cj5g868olfdm.us-east-1.rds.amazonaws.com")
+# DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "postgres")
 
@@ -52,7 +59,7 @@ app = FastAPI()
 
 API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
-DEPLOYMENT_MODE = "BLUE/GREEN"
+DEPLOYMENT_MODE = "FIRST_DEPLOYMENT_NEW_RELIC"
 
 security = HTTPBearer()
 
