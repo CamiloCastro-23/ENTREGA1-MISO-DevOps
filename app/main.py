@@ -17,7 +17,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
 import os
-import socket
+import socket #pragma: no cover
 
 
 DB_USERNAME = os.getenv("DB_USERNAME", "postgres")
